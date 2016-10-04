@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+
+
+{% block body %}
+
+
+{% if encryptednvp != None %}
+  <div class="row">
+      <div class="well well-lg">
+        {{ encryptednvp }}
+      </div>
+      <form class="form-inline" method="post" action="{{ url_for('decrypt') }}">
+          <input type="hidden" name="enc_val" value="{{ encryptednvp }}">
+          <button type="submit" name="decrypt" class="btn btn-lg btn-danger">
+              <i class="fa fa-universal-access"></i> Decrypt
+          </button>
+      </form>
+  </div>
+{% endif %}
+
+{% endblock %}
