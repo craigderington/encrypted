@@ -1,14 +1,17 @@
 from flask import Flask, flash, render_template, url_for, request, redirect
 from datetime import datetime
 import config
+import cryption
 import base64
 import math
 import Crypto.Cipher.AES
 import zlib
 
 app = Flask(__name__)
+app.enc_key = config.ENCRYPT_KEY
 app.secret_key = config.SECRET_KEY
 app.url_map.strict_slashes = False
+app.DEBUG = config.DEBUG
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -31,17 +34,7 @@ def encrypt():
 
         if len(nvpstring) != 0:
             try:
-                # compress and pad using zlib
-                compresslevel = 9
-                compress = zlib.compressobj(compresslevel, zlib.DEFLATED, zlib.MAX_WBITS, zlib.DEF_MEM_LEVEL, 0)
-                nvpstring = compress.compress(nvpstring)
-                nvpstring = compress.flush()
-
-                # encrypt the compressed nvpstring
-                enc_key = config.ENCRYPT_KEY
-                cryptoobj = Crypto.Cipher.AES.new(enc_key)
-                encryptednvp = base64.urlsafe_b64encode(cryptoobj.encrypt(nvpstring.ljust(int(math.ceil(len(nvpstring)/16.0) * 16))))
-
+                cryption.encrypt(enc_key, plaintext=nvpstring)
             except (ValueError, TypeError) as e:
                 return 'Sorry, an error has occurred' + str(e)
         else:
@@ -65,17 +58,7 @@ def decrypt():
 
         if len(nvpstring) != 0:
             try:
-                # compress and pad using zlib
-                compresslevel = 9
-                compress = zlib.compressobj(compresslevel, zlib.DEFLATED, zlib.MAX_WBITS, zlib.DEF_MEM_LEVEL, 0)
-                nvpstring = compress.compress(nvpstring)
-                nvpstring = compress.flush()
-
-                # decrypt the compressed nvpstring
-                enc_key = config.ENCRYPT_KEY
-                cryptoobj = Crypto.Cipher.AES.new(enc_key)
-                decryptednvp = base64.urlsafe_b64encode(cryptoobj.decrypt(nvpstring.ljust(int(math.ceil(len(nvpstring)/16.0) * 16))))
-
+                cryption.decrypt(enc_key, text=nvpstring)
             except (ValueError, TypeError) as e:
                 return 'Sorry, an error has occurred' + str(e)
         else:
@@ -93,7 +76,7 @@ if __name__ == '__main__':
     app.run(
         '0.0.0.0',
         port=5555,
-        debug=True,
+        debug=app.DEBUG,
     )
 
 
