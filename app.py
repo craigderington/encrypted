@@ -2,11 +2,8 @@ from flask import Flask, flash, render_template, url_for, request, redirect
 from datetime import datetime
 import config
 import cryption
-import base64
-import math
-import Crypto.Cipher.AES
-import zlib
 
+# app settings
 app = Flask(__name__)
 app.enc_key = config.ENCRYPT_KEY
 app.secret_key = config.SECRET_KEY
@@ -34,18 +31,17 @@ def encrypt():
 
         if len(nvpstring) != 0:
             try:
-                cryption.encrypt(enc_key, plaintext=nvpstring)
+                encryptednvp = cryption.encrypt(app.enc_key, plaintext=nvpstring)
             except (ValueError, TypeError) as e:
-                return 'Sorry, an error has occurred' + str(e)
+                return 'Sorry, an error has occurred ' + str(e)
         else:
             encryptednvp = None
             flash('Can not encrypt an empty string.  Please try again...')
 
-
-    return render_template(
-        'encrypt.html',
-        encryptednvp=encryptednvp
-    )
+        return render_template(
+            'encrypt.html',
+            encryptednvp=encryptednvp
+        )
 
 
 @app.route('/decrypt', methods=['POST'])
@@ -58,18 +54,17 @@ def decrypt():
 
         if len(nvpstring) != 0:
             try:
-                cryption.decrypt(enc_key, text=nvpstring)
+                cryption.decrypt(app.enc_key, text=nvpstring)
             except (ValueError, TypeError) as e:
                 return 'Sorry, an error has occurred' + str(e)
         else:
             encryptednvp = None
             flash('Can not decrypt an empty string.  Please try again...')
 
-
-    return render_template(
-        'decrypt.html',
-        encryptednvp=decryptednvp
-    )
+        return render_template(
+            'decrypt.html',
+            decryptednvp=decryptednvp
+        )
 
 
 if __name__ == '__main__':
