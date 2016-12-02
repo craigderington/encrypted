@@ -1,7 +1,7 @@
 ## PyCipher.net
 
-Advanced Encryption Standard (PCI) Level 1 128-bit Encryption Methodology
-Encryption/Encoding (with Flask and PyCrypto)
+* Advanced Encryption Standard (PCI) Level 1 128-bit Encryption Methodology
+* Encryption/Encoding (with Flask and PyCrypto)
 
 ##### Modules:
 
