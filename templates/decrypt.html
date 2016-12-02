@@ -4,10 +4,32 @@
 
 {% block body %}
 
-    {% if encryptednvp != None %}
-
-        {{ encryptednvp }}
-
+    {% if decrypted_string != None %}
+        <div class="row">
+            <div class="well well-lg">
+                {{ decrypted_string }}
+            </div>
+            <form class="form-inline" method="post" action="{{ url_for('encrypt') }}">
+                <input type="hidden" name="enc_val" value="{{ decrypted_string }}">
+                <button type="submit" name="decrypt" class="btn btn-lg btn-primary">
+                    <i class="fa fa-user-secret"></i> Encrypt
+                </button>
+            </form>
+        </div>
+    {% else %}
+        <div class="row">
+            <form class="form-horizontal" method="post" action="{{ url_for('decrypt') }}">
+                <div class="form-group-lg">
+                    <div class="col-lg-12">
+                        <input type="text" name="enc_val" id="decryptedValue" class="form-control"
+                               placeholder="Enter your string to decrypt..."/>
+                        <button style="margin-top:5px;" type="submit" class="btn btn-lg btn-default">
+                            <i class="fa fa-lock"></i> Decrypt
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
     {% endif %}
 
 {% endblock %}

@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+
+
+{% block body %}
+
+    <div class="bs-docs-section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="bs-component">
+                    <div class="jumbotron">
+                        <h1>About AES</h1>
+                        <p>Introducing the Advanced Encryption Standard.  128, 192 and 256 bit encryption.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="well">
+                    <p>AES, the acronym for the Advanced Encryption Standard, is a symmetric encryption algorithm. The algorithm was developed by two Belgian cryptographer Joan Daemen and Vincent Rijmen. AES was designed to be efficient in both hardware and software, and supports a block length of 128 bits and key lengths of 128, 192, and 256 bits.</p>
+
+                    <p>PyCipher is a web service used to encrypt and decrypt text using the AES encryption algorithm.</p>
+
+                    <p><b>Usage:</b></p>
+                    <p>To encrypt a string of text, enter your input string in the text field and click the <i><b>Encrypt</b></i> button.<br />
+                    The result of the encryption will appear in a base64 encoded string to prevent character encoding problems.</p>
+
+                    <p>To decrypt an AES encrypted string, ensure the string is base64 encoded and was previously encrypted with AES algorithm!
+                    Enter the encrypted text in the text field and click the <i><b>Decrypt</b></i> button.
+                    </p>
+
+                    <p>AES encryption is currently in use by many U.S. Government Agencies for securing <b><i>sensitive</i></b> material.  However, this level of encryption is not secure enough for <b><i>classified</i></b> documents.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

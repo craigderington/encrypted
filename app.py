@@ -1,7 +1,7 @@
 from flask import Flask, flash, render_template, url_for, request, redirect
 from datetime import datetime
 import config
-import cryption
+import cipher
 
 # app settings
 app = Flask(__name__)
@@ -13,64 +13,93 @@ app.DEBUG = config.DEBUG
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    message = 'Welcome to encrypted.me.  Please enter your string to encrypt or decrypt'
-    encryptednvp = None
+    message = 'Welcome to pycipher.net.  Please enter your string to encrypt!'
 
     return render_template(
         'index.html',
         message=message
     )
 
-@app.route('/encrypt', methods=['POST'])
+
+@app.route('/encrypt', methods=['GET', 'POST'])
 def encrypt():
     """
     Encrypt function
     """
-    if request.method == 'POST':
-        nvpstring = request.form['enc_val']
+    encrypted_string = None
 
-        if len(nvpstring) != 0:
+    if request.method == 'POST':
+        payload = request.form['enc_val'].strip()
+
+        if len(payload) != 0:
             try:
-                encryptednvp = cryption.encrypt(app.enc_key, plaintext=nvpstring)
+                _cipher = cipher.AESCipher(app.enc_key)
+                encrypted_string = _cipher.encrypt(payload)
             except (ValueError, TypeError) as e:
                 return 'Sorry, an error has occurred ' + str(e)
+
         else:
-            encryptednvp = None
+            encrypted_string = None
             flash('Can not encrypt an empty string.  Please try again...')
 
-        return render_template(
-            'encrypt.html',
-            encryptednvp=encryptednvp
-        )
+    return render_template(
+        'encrypt.html',
+        encrypted_string=encrypted_string
+    )
 
 
-@app.route('/decrypt', methods=['POST'])
+@app.route('/decrypt', methods=['GET', 'POST'])
 def decrypt():
     """
     Decrypt function
     """
+    decrypted_string = None
+
     if request.method == 'POST':
-        nvpstring = request.form['enc_val']
+        payload = request.form['enc_val'].strip()
 
-        if len(nvpstring) != 0:
+        if len(payload) != 0:
             try:
-                cryption.decrypt(app.enc_key, text=nvpstring)
+                _cipher = cipher.AESCipher(app.enc_key)
+                decrypted_string = _cipher.decrypt(payload)
             except (ValueError, TypeError) as e:
-                return 'Sorry, an error has occurred' + str(e)
-        else:
-            encryptednvp = None
-            flash('Can not decrypt an empty string.  Please try again...')
+                return 'Sorry, an error has occured ' + str(e)
 
-        return render_template(
-            'decrypt.html',
-            decryptednvp=decryptednvp
-        )
+        else:
+            decrypted_string = None
+            flash('Sorry, can not decrypt an empty string.  Please check your input and try again...')
+
+    return render_template(
+        'decrypt.html',
+        decrypted_string=decrypted_string
+    )
+
+
+@app.route('/aes', methods=['GET'])
+def aes():
+    return render_template(
+        'aes.html'
+    )
+
+
+@app.route('/about', methods=['GET'])
+def about():
+    return render_template(
+        'about.html'
+    )
+
+
+@app.route('/docs', methods=['GET'])
+def docs():
+    return render_template(
+        'docs.html'
+    )
 
 
 if __name__ == '__main__':
     app.run(
         '0.0.0.0',
-        port=5555,
+        port=config.PORT,
         debug=app.DEBUG,
     )
 
