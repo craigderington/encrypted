@@ -96,6 +96,13 @@ def docs():
     )
 
 
+@app.route('/tos', methods=['GET'])
+def tos():
+    return render_template(
+        'tos.html'
+    )
+
+
 if __name__ == '__main__':
     app.run(
         '0.0.0.0',
