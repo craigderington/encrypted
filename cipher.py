@@ -15,7 +15,7 @@ class AESCipher:
 
     def __init__(self, key):
         """
-        Initialize encryption encryption key and block size
+        Initialize encryption key and block size
 
         We use AES-128 with 16 bytes block size and CBC mode
 

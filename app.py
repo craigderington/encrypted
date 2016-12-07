@@ -59,11 +59,16 @@ def decrypt():
         payload = request.form['enc_val'].strip()
 
         if len(payload) != 0:
-            try:
-                _cipher = cipher.AESCipher(app.enc_key)
-                decrypted_string = _cipher.decrypt(payload)
-            except (ValueError, TypeError) as e:
-                return 'Sorry, an error has occured ' + str(e)
+            if len(payload) % 2 == 0:
+                try:
+                    _cipher = cipher.AESCipher(app.enc_key)
+                    decrypted_string = _cipher.decrypt(payload)
+                except (ValueError, TypeError) as e:
+                    return 'Sorry, an error has occurred ' + str(e)
+            else:
+                decrypted_string = None
+                flash('The input string must be a multiple of 16 in order to decrypt. \
+                       Please check your input and try again.')
 
         else:
             decrypted_string = None
