@@ -18,14 +18,13 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" style="margin-top:-20px;">
         <form class="form-inline" method="post" action="{{ url_for('encrypt') }}">
             <div class="form-group-lg">
                 <div class="col-lg-12 col-sm-12">
                     <input type="text"
                            name="enc_val"
                            id="encryptedValue"
-                           size="104"
                            class="form-control"
                            placeholder="Enter your string to encrypt..."/>
                     <button style="margin-top:5px;" type="submit" class="btn btn-lg btn-primary">
